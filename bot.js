@@ -15,13 +15,17 @@ TelegramClient.command('pass', ctx => {
 
     var TelegramMessage = ctx.message.text.slice(6);
     if (TelegramMessage.startsWith(BotName)) TelegramMessage = TelegramMessage.slice(BotName.length);
+    if (TelegramMessage.trim() == "") return;
 
     DiscordClient.channels.cache.get(DiscordChannel).send(`${ctx.from.username}: ${TelegramMessage}`);
 });
 
 DiscordClient.on('message', msg => {
     if(msg.content.startsWith('!pass ')) {
-        TelegramClient.telegram.sendMessage(TelegramChannel, `${msg.author.username}: ${msg.content.slice(6)}`);
+        var DiscordMessage = msg.content.slice(6);
+        if(DiscordMessage.trim() == "") return;
+        
+        TelegramClient.telegram.sendMessage(TelegramChannel, `${msg.author.username}: ${DiscordMessage}`);
     }
 });
 
